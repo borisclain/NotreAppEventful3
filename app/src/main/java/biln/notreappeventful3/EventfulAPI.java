@@ -47,7 +47,7 @@ public class EventfulAPI {
             JSONObject events = js.getJSONObject("events");
             JSONArray event  = events.getJSONArray("event");
 
-            JSONObject firstEventFound = event.getJSONObject(0);
+            JSONObject firstEventFound = event.getJSONObject(0);//prendre le premier event de la liste
             title = firstEventFound.getString("title");
 
 

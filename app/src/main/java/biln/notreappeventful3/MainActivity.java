@@ -65,8 +65,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         on aura l'écran de première connexion à chaque exécution de l'app.
          */
         //TODO: À enlever quand on sera content de l'écran de première connexion
-        //edit.clear() ;
-        //edit.commit();
+        edit.clear() ;
+        edit.commit();
 
 
     }
