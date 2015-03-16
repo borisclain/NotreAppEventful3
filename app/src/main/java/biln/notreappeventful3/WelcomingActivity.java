@@ -34,6 +34,8 @@ public class WelcomingActivity extends ActionBarActivity implements ConnectionCa
                 .build();
         mGoogleApiClient.connect();
         Toast.makeText(this, "On a détecté que vos coordonnées =" + sLat + " ; " + sLon, Toast.LENGTH_LONG).show();
+
+
     }
 
 

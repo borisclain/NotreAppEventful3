@@ -17,55 +17,78 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Boris on 2015-03-10.
  */
 public class EventfulAPI {
 
-    String title;
-
-    //Deux Strings non utilisees
-    //String type;
-    //String date;
-
-    String erreur;
-
+    ArrayList<Event> eventsFound;                                          //peuplé par la recherche
     String apiKey = "b5JxXhsHhJTW2mzP";
+    String url = "http://api.eventful.com/json/events/search?app_key="+apiKey;
 
-    public EventfulAPI() {
-        erreur = null;
 
-        String url = "http://api.eventful.com/json/events/search?app_key="+apiKey+"&keywords=books&location=Montreal&date=Future";
-        Log.d("URL", url);
 
+    public EventfulAPI(){
+        eventsFound = new ArrayList<Event>();
+    }
+
+
+    /**
+     * Trouve les événements qui s'en viennent dans la ville donnée en paramètre
+     *
+     * @param city
+     */
+
+    public void getNextEvents(String city){
+        String query = url+"&location="+city+"&date=Future";
+        getEvents(query, 50);
+    }
+
+
+    /**
+     * Méthode utilitaire locale
+     *
+     * @param query
+     * @param maxResults
+     */
+
+    private void getEvents(String query, int maxResults){
         try {
-            HttpEntity page = getHttp(url);
-            // Interprète la page retournée comme un fichier JSON encodé en UTF-8
+            HttpEntity page = getHttp(query);
             JSONObject js = new JSONObject(EntityUtils.toString(page, HTTP.UTF_8));
-
             JSONObject events = js.getJSONObject("events");
-            JSONArray event  = events.getJSONArray("event");
+            JSONArray event = events.getJSONArray("event");
+            Log.d("WEB", "Nombre d'emissions: " + event.length());
 
-            JSONObject firstEventFound = event.getJSONObject(0);//prendre le premier event de la liste
-            title = firstEventFound.getString("title");
-
+            for(int i =0; i<event.length()&& i < maxResults ;i++){
+                JSONObject item = event.getJSONObject(i);
+                eventsFound.add(new Event(item.getString("id"),
+                                            item.getString("title"),
+                                                item.getString("start_time"),
+                                                    item.getString("city_name")));
+            }
 
         } catch (ClientProtocolException e) {
-            erreur = "Erreur HTTP (protocole) :" + e.getMessage();
+            Log.d("HTTP ","Erreur: "+e.getMessage());
         } catch (IOException e) {
-            erreur = "Erreur HTTP (IO) :" + e.getMessage();
+            Log.d("Web ","Erreur: "+e.getMessage());
         } catch (ParseException e) {
-            erreur = "Erreur JSON (parse) :" + e.getMessage();
+            Log.d("Parse ","Erreur: "+e.getMessage());
         } catch (JSONException e) {
-            erreur = "Erreur JSON :" + e.getMessage();
+            Log.d("JSON ","Erreur: "+e.getMessage());
         }
-
-
     }
-    private HttpEntity getHttp(String url) throws ClientProtocolException, IOException {
+
+
+
+
+
+
+    private HttpEntity getHttp(String myUrl) throws ClientProtocolException, IOException {
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet http = new HttpGet(url);
+        HttpGet http = new HttpGet(myUrl);
         HttpResponse response = httpClient.execute(http);
         return response.getEntity();
     }

@@ -4,28 +4,24 @@
     android:layout_height="match_parent">
 
 
-    <Button
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button1"
-        android:id="@+id/button1"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.95"
-        android:capitalize="words"
-        android:clickable="false"
-        android:background="#ff0081ff"
-        style="@style/Base.TextAppearance.AppCompat.Large"
-        android:elegantTextHeight="false" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Événements"
+        android:id="@+id/textView" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button2"
-        android:id="@+id/button2"
-        android:layout_weight="1"
-        android:clickable="false"
-        android:background="#ff00ff11"
-        style="@style/Base.TextAppearance.AppCompat.Large"
-        android:capitalize="words" />
+        android:text="Rechercher"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/activity_list"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
