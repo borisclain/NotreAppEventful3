@@ -5,15 +5,17 @@ package biln.notreappeventful3;
  */
 class Event {
 
-    public String id;
+    public String idFromEventful;
     public String title;
-    public String date;
+    public String date_start;
+    public String date_stop;
     public String location;
 
-    public Event(String id, String title,String date,String location){
-        this.id = id;
+    public Event(String idFromEventful, String title,String date_start, String date_stop, String location){
+        this.idFromEventful = idFromEventful;
         this.title = title;
-        this.date = date;
+        this.date_start = date_start;
+        this.date_stop = date_stop;
         this.location = location;
     }
 

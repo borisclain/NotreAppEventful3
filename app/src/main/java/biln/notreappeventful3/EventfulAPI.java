@@ -2,7 +2,6 @@ package biln.notreappeventful3;
 
 
 import android.util.Log;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -40,9 +39,8 @@ public class EventfulAPI {
      *
      * @param city
      */
-
     public void getNextEvents(String city){
-        String query = url+"&location="+city+"&date=Future";
+        String query = url+"&location="+city+"&page_size=50";
         getEvents(query, 50);
     }
 
@@ -60,14 +58,25 @@ public class EventfulAPI {
             JSONObject js = new JSONObject(EntityUtils.toString(page, HTTP.UTF_8));
             JSONObject events = js.getJSONObject("events");
             JSONArray event = events.getJSONArray("event");
-            Log.d("WEB", "Nombre d'emissions: " + event.length());
+            Log.d("WEB", "Nombre d'événements: " + event.length());
 
             for(int i =0; i<event.length()&& i < maxResults ;i++){
                 JSONObject item = event.getJSONObject(i);
-                eventsFound.add(new Event(item.getString("id"),
-                                            item.getString("title"),
-                                                item.getString("start_time"),
-                                                    item.getString("city_name")));
+                //Si la valeur sous "stop_time" est null
+                if (item.isNull("stop_time")) {
+                    eventsFound.add(new Event(item.getString("id"),
+                                                item.getString("title"),
+                                                    item.getString("start_time"),
+                                                        "2020-01-01",//TODO Important
+                                                            item.getString("city_name")));
+                }
+                else{
+                    eventsFound.add(new Event(item.getString("id"),
+                                                item.getString("title"),
+                                                    item.getString("start_time"),
+                                                        item.getString("stop_time"),
+                                                            item.getString("city_name")));
+                }
             }
 
         } catch (ClientProtocolException e) {
@@ -80,10 +89,6 @@ public class EventfulAPI {
             Log.d("JSON ","Erreur: "+e.getMessage());
         }
     }
-
-
-
-
 
 
     private HttpEntity getHttp(String myUrl) throws ClientProtocolException, IOException {

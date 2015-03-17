@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "biln.notreapp"
+        applicationId "biln.notreappEventful3"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1

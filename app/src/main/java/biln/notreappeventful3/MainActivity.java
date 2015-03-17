@@ -97,23 +97,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /*
-        Log.d("db","CLIC item "+position+" id="+id);
-        DBHelper.setEventAsFavorite(db, (int) id, 1); //TODO ! Problème ! Source de bug
+    public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long viewID) {
+
+        Log.d("db","Clic sur item en position= "+position+" et avec viewID = "+ viewID);
+
+        DBHelper.setEventAsFavorite(db, (int)viewID, 1); // TODO !
         Cursor c = DBHelper.listEvents(db);
         adapter.changeCursor(c);
-        */
+
     }
 
     public void onClick(View v) {
-        Toast.makeText(this, "Chargement des donnees du Web", Toast.LENGTH_SHORT).show();
-        new SearchEventful().execute();
+        new SearchEventfulAndPopulate().execute();
     }
 
 
-
-    private class SearchEventful extends AsyncTask<String, String, EventfulAPI> {
+    private class SearchEventfulAndPopulate extends AsyncTask<String, String, EventfulAPI> {
 
         //TODO Implanter une barre de progrès ou une horloge qui tourne au lieu d'un toast
         protected void onPreExecute() {
@@ -125,12 +124,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             web.getNextEvents("Montreal");
             ContentValues val = new ContentValues();
             for(int i=0;i<web.eventsFound.size();i++){
-                val.put(DBHelper.C_ID, web.eventsFound.get(i).id); //TODO En parler avec RANIA Source de bug?
+                // ON NE SPÉCIFIE PAS EPLICITEMENT LA VALEUR DU ID. ON LE LAISSE AUTOINCRÉMENTER
+                val.put(DBHelper.C_ID_FROM_EVENTFUL, web.eventsFound.get(i).idFromEventful);
                 val.put(DBHelper.C_TITLE, web.eventsFound.get(i).title);
-                val.put(DBHelper.C_DATE, web.eventsFound.get(i).date);
+                val.put(DBHelper.C_DATE_START, web.eventsFound.get(i).date_start);
+                val.put(DBHelper.C_DATE_STOP, web.eventsFound.get(i).date_stop);
                 val.put(DBHelper.C_LOCATION, web.eventsFound.get(i).location);
                 val.put(DBHelper.C_FAVORITE, 0);
-                db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val); //TODO Conflict
+                db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val);
             }
             Log.d("DB", "nouveux titres ajoutes: ");
             return null;
@@ -170,7 +171,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Cursor c=getCursor();
             c.moveToPosition(position);
             String id= c.getString(c.getColumnIndex(DBHelper.C_ID));
-            dateV.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE)));
+            dateV.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
             titleV.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " id supposé : "+id);
 
             return v;
