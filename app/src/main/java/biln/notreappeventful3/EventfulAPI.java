@@ -40,8 +40,9 @@ public class EventfulAPI {
      * @param city
      */
     public void getNextEvents(String city){
-        String query = url+"&location="+city+"&page_size=50";
-        getEvents(query, 50);
+        String query = url+"&location="+city+"&sort_order=popularity"+"&page_size=100";
+        //nécessaire de faire sort_order par popularity car sinon les pages d'Eventful sont folles
+        getEvents(query);
     }
 
 
@@ -49,36 +50,14 @@ public class EventfulAPI {
      * Méthode utilitaire locale
      *
      * @param query
-     * @param maxResults
      */
 
-    private void getEvents(String query, int maxResults){
-        try {
+    private void getEvents(String query){
+        int page_count = 0;
+        try{
             HttpEntity page = getHttp(query);
             JSONObject js = new JSONObject(EntityUtils.toString(page, HTTP.UTF_8));
-            JSONObject events = js.getJSONObject("events");
-            JSONArray event = events.getJSONArray("event");
-            Log.d("WEB", "Nombre d'événements: " + event.length());
-
-            for(int i =0; i<event.length()&& i < maxResults ;i++){
-                JSONObject item = event.getJSONObject(i);
-                //Si la valeur sous "stop_time" est null
-                if (item.isNull("stop_time")) {
-                    eventsFound.add(new Event(item.getString("id"),
-                                                item.getString("title"),
-                                                    item.getString("start_time"),
-                                                        "2020-01-01",//TODO Important
-                                                            item.getString("city_name")));
-                }
-                else{
-                    eventsFound.add(new Event(item.getString("id"),
-                                                item.getString("title"),
-                                                    item.getString("start_time"),
-                                                        item.getString("stop_time"),
-                                                            item.getString("city_name")));
-                }
-            }
-
+            page_count = Integer.parseInt(js.getString("page_count"));
         } catch (ClientProtocolException e) {
             Log.d("HTTP ","Erreur: "+e.getMessage());
         } catch (IOException e) {
@@ -87,6 +66,44 @@ public class EventfulAPI {
             Log.d("Parse ","Erreur: "+e.getMessage());
         } catch (JSONException e) {
             Log.d("JSON ","Erreur: "+e.getMessage());
+        }
+        int i = 0;
+        while(i < page_count) {
+            try {
+                HttpEntity page = getHttp(query+"&page_number="+Integer.toString(i+1));
+                JSONObject js = new JSONObject(EntityUtils.toString(page, HTTP.UTF_8));
+                JSONObject events = js.getJSONObject("events");
+                JSONArray event = events.getJSONArray("event");
+                Log.d("WEB", "Nombre d'événements: " + event.length());
+
+                for (int j = 0; j < event.length(); j++) {
+                    JSONObject item = event.getJSONObject(j);
+                    //Si la valeur sous "stop_time" est null
+                    if (item.isNull("stop_time")) {
+                        eventsFound.add(new Event(item.getString("id"),
+                                                    item.getString("title"),
+                                                        item.getString("start_time"),
+                                                            "2020-01-01",//TODO Important
+                                                                item.getString("city_name")));
+                    } else {
+                        eventsFound.add(new Event(item.getString("id"),
+                                                    item.getString("title"),
+                                                        item.getString("start_time"),
+                                                            item.getString("stop_time"),
+                                                                item.getString("city_name")));
+                    }
+                }
+
+            } catch (ClientProtocolException e) {
+                Log.d("HTTP ", "Erreur: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("Web ", "Erreur: " + e.getMessage());
+            } catch (ParseException e) {
+                Log.d("Parse ", "Erreur: " + e.getMessage());
+            } catch (JSONException e) {
+                Log.d("JSON ", "Erreur: " + e.getMessage());
+            }
+            i++;
         }
     }
 

@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     static final String DB_NAME = "eventful.db";
-    static final int DB_VERSION = 16;                   //TODO Important pour le développement
+    static final int DB_VERSION = 23;                   //TODO Important pour le développement
 
     static final String TABLE_EVENTS = "events";
     static final String C_ID = "_id";
