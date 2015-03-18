@@ -2,13 +2,10 @@ package biln.notreappeventful3;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,19 +22,20 @@ import android.widget.Toast;
 /**
  *
  */
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
 
     ListView listv;
     SQLiteDatabase db;
     DBHelper dbh;
     MyAdapter adapter;
-    Button btn;
+    String city;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn = (Button)findViewById(R.id.button);
+        city = LauncherActivity.settings.getString("myCity", "Ottawa");
         listv = (ListView)findViewById(R.id.activity_list);
         dbh = new DBHelper(this);
         db = dbh.getWritableDatabase();
@@ -47,34 +44,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listv = (ListView)findViewById(R.id.activity_list);
         listv.setAdapter(adapter);
         listv.setOnItemClickListener(this);
-        btn.setOnClickListener(this);
+
+        new SearchEventfulAndPopulate().execute();
     }
 
     protected void onResume(){
         super.onResume();
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
-        SharedPreferences.Editor edit = prefs.edit();
-        if(!previouslyStarted){
-            Toast.makeText(this, "Premiere fois", Toast.LENGTH_LONG).show();
-            edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
-            edit.commit();
-            Intent i = new Intent(this, WelcomingActivity.class);
-            startActivity(i);
-
-        }
-
-        /*
-        Les deux lignes suivantes s'occupent de vider les préférences. En vidant les préférances,
-        on aura l'écran de première connexion à chaque exécution de l'app.
-         */
-        //TODO: À enlever quand on sera content de l'écran de première connexion
-        //edit.clear() ;
-        //edit.commit();
     }
-
-
 
 
     @Override
@@ -101,16 +77,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         Log.d("db","Clic sur item en position= "+position+" et avec viewID = "+ viewID);
 
-        DBHelper.setEventAsFavorite(db, (int)viewID, 1); // TODO !
+        DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
         Cursor c = DBHelper.listEvents(db);
         adapter.changeCursor(c);
 
     }
-
-    public void onClick(View v) {
-        new SearchEventfulAndPopulate().execute();
-    }
-
 
     private class SearchEventfulAndPopulate extends AsyncTask<String, String, EventfulAPI> {
 
@@ -121,10 +92,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         protected EventfulAPI doInBackground(String... params) {
             EventfulAPI web = new EventfulAPI();
-            web.getNextEvents("Montreal");
+            web.getNextEvents(city);
             ContentValues val = new ContentValues();
             for(int i=0;i<web.eventsFound.size();i++){
-                // ON NE SPÉCIFIE PAS EPLICITEMENT LA VALEUR DU ID. ON LE LAISSE AUTOINCRÉMENTER
+                // ON NE SPÉCIFIE PAS EPLICITEMENT LA VALEUR DE _id. ON LE LAISSE AUTOINCRÉMENTER
                 val.put(DBHelper.C_ID_FROM_EVENTFUL, web.eventsFound.get(i).idFromEventful);
                 val.put(DBHelper.C_TITLE, web.eventsFound.get(i).title);
                 val.put(DBHelper.C_DATE_START, web.eventsFound.get(i).date_start);

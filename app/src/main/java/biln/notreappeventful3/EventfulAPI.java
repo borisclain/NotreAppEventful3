@@ -67,7 +67,8 @@ public class EventfulAPI {
         } catch (JSONException e) {
             Log.d("JSON ","Erreur: "+e.getMessage());
         }
-        int i = 0;
+        //int i = 0;
+        int i =  page_count - 1; //TODO ! Juste pour abréger
         while(i < page_count) {
             try {
                 HttpEntity page = getHttp(query+"&page_number="+Integer.toString(i+1));

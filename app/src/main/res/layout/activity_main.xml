@@ -11,13 +11,6 @@
         android:text="Événements"
         android:id="@+id/textView" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rechercher"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal" />
-
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

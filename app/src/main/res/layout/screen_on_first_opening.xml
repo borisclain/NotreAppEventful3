@@ -13,30 +13,27 @@
         android:text="@string/prompt"
         android:id="@+id/dayCondition"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button" />
+        android:layout_alignRight="@+id/GoButton"
+        android:layout_alignEnd="@+id/GoButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button"
-        android:id="@+id/button"
-        android:layout_below="@+id/editText"
+        android:id="@+id/GoButton"
+        android:layout_marginRight="39dp"
+        android:layout_marginEnd="39dp"
+        android:layout_below="@+id/editT"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="51dp"
-        android:layout_marginEnd="51dp" />
+        android:layout_marginTop="35dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:text="Entrez votre ville"
-        android:layout_marginRight="51dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginTop="147dp"
+        android:id="@+id/editT"
+        android:layout_marginTop="148dp"
+        android:text="Entrez"
         android:layout_below="@+id/dayCondition"
-        android:layout_alignRight="@+id/dayCondition"
-        android:layout_alignEnd="@+id/dayCondition" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

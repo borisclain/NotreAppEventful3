@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     static final String DB_NAME = "eventful.db";
-    static final int DB_VERSION = 23;                   //TODO Important pour le développement
+    static final int DB_VERSION = 65;                   //TODO Important pour le développement
 
     static final String TABLE_EVENTS = "events";
     static final String C_ID = "_id";
@@ -97,11 +97,39 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public static void setEventAsFavorite(SQLiteDatabase db, int id, int favorite) {
+    public static void changeFavoriteStatus(SQLiteDatabase db, int id) {
         ContentValues val = new ContentValues();
-        val.put(C_FAVORITE, favorite);
+        Cursor d = db.rawQuery("select * from "+TABLE_EVENTS+" where "+C_ID+" = "+id, null);
+        Log.d("DBQuery", " success");
+        Log.d("DBQuery", "ColumnIndex de favorite: "+d.getColumnIndex(C_FAVORITE));
+        d.moveToFirst();
+        int valeurFavorite = d.getInt(d.getColumnIndex(C_FAVORITE));
+        Log.d("DBQuery", "valeur Favorite Success");
+
+        if (valeurFavorite == 0 ) {
+            Log.d("DBQUERY", "Success du if");
+            val.put(C_FAVORITE, 1);
+        }
+        else {
+            Log.d("DBQUERY", "Success du else");
+            val.put(C_FAVORITE, 0);
+        }
         db.update(TABLE_EVENTS ,val, C_ID+" = "+id, null); //update l'élément dont on a récupéré le ID
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

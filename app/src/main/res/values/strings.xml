@@ -2,9 +2,9 @@
 
     <string name="app_name">NotreApp</string>
     <string name="action_settings">Settings</string>
-    <string name="pref_previously_started"></string>
 
     <string name="prompt">Dans quelle ville êtes-vous?</string>
-    <string name="button">Go!</string>
+    <string name="GoButton">Go!</string>
+    <string name="editT">Entrez votre ville</string>
 
 </resources>
