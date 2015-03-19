@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ff8acaff">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="UNE DÉCOUVERTE FABULEUSE AU ROYAUME DES DRAGONS ET DES AMIS DES ANIMAUX"
+
+        android:singleLine="true"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+
+
+        android:id="@+id/title"
+        android:padding="10dp"
+        android:background="#ff8acaff"
+        android:clickable="true"
+        android:autoText="true"
+        android:gravity="center_vertical|left" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Au Métropolis, Montréal"
+        android:id="@+id/textView2"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="14px" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ff8acaff">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="117dp"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/startID"
+                android:layout_weight="1"
+                android:text="@string/start"
+                android:minLines="2"
+                android:elegantTextHeight="false" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="fill_parent" />
+
+            <TextView
+                android:layout_width="112dp"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/stopID"
+                android:layout_weight="1"
+                android:text="Le 15 février 2016 à 20h20"
+                android:minLines="2"
+                android:elegantTextHeight="false" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="fill_parent" />
+
+            <TextView
+                android:layout_width="55dp"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/prixID"
+                android:layout_weight="1"
+                android:text="payant"
+                android:gravity="center_vertical|center_horizontal"
+                android:textStyle="normal|italic" />
+
+            <Space
+                android:layout_width="20px"
+                android:layout_height="fill_parent" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/frame">
+
+                <CheckBox
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:button="@android:drawable/btn_star"
+                    android:id="@+id/my_star_button"
+                    android:checked="false"
+                    android:gravity="center_vertical|center_horizontal" />
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

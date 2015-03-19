@@ -22,7 +22,7 @@ import android.widget.Toast;
 /**
  *
  */
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     ListView listv;
     SQLiteDatabase db;
@@ -50,6 +50,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
     protected void onResume(){
         super.onResume();
+    }
+
+
+    public void onClick(View v){
     }
 
 

@@ -6,15 +6,17 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Événements"
         android:id="@+id/textView" />
+
 
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/activity_list"
         android:layout_gravity="center_horizontal" />
+
 
 </LinearLayout>

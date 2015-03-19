@@ -7,4 +7,8 @@
     <string name="GoButton">Go!</string>
     <string name="editT">Entrez votre ville</string>
 
+    <string name="start">Le 2 mars 2015 à 20h00</string>
+    <string name="stop">Le 2 mars 2015 à 23h00</string>
+    <string name="prix">payant</string>
+
 </resources>
