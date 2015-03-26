@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
     DBHelper dbh;
     MyAdapter adapter;
     String city;
+
 
 
     @Override
@@ -56,10 +59,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
     @Override
     public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long viewID) {
 
-
         Toast.makeText(getApplicationContext(), "Clic reçu", Toast.LENGTH_SHORT).show();
-
-
 
         Log.d("db","Clic sur item en position= "+position+" et avec viewID = "+ viewID);
         Intent intent = new Intent(this, DetailsActivity.class);
@@ -76,10 +76,14 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         startActivity(intent);
 
         //adapter.changeCursor(c);
-        // DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
+        //DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
         //Cursor c = DBHelper.listEvents(db);
         //adapter.changeCursor(c);
     }
+
+
+
+
 
     private class SearchEventfulAndPopulate extends AsyncTask<String, Integer, Cursor> {
 
@@ -148,6 +152,8 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
             TextView stopT = (TextView)v.findViewById(R.id.stopT);
             TextView location = (TextView)v.findViewById(R.id.location);
 
+            CheckBox myBtn = (CheckBox)v.findViewById(R.id.starButton);
+
             Cursor c = getCursor();
             c.moveToPosition(position);
             String id= c.getString(c.getColumnIndex(DBHelper.C_ID));
@@ -157,7 +163,18 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
             startT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
             stopT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)));
 
+            myBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int pos = ((Integer)buttonView.getTag()).intValue();
+                    Log.d("Listener", "Checked "+isChecked+" "+pos);
+
+                }
+            });
+
+            myBtn.setTag(new Integer(Integer.parseInt(id)));
             return v;
+
         }
 
         @Override
