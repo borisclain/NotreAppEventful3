@@ -36,7 +36,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        city = LauncherActivity.settings.getString("myCity", "Ottawa");
+        city = Launcher.settings.getString("myCity", "Ottawa");
         listv = (ListView)findViewById(R.id.activity_list);
         dbh = new DBHelper(this);
         db = dbh.getWritableDatabase();

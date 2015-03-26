@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".LauncherActivity"
+            android:name=".Launcher"
             android:label="NotreAppEventful3" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

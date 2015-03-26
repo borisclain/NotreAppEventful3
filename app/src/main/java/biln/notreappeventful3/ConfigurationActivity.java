@@ -54,7 +54,7 @@ public class ConfigurationActivity extends ActionBarActivity implements Connecti
 
 
     public void onClick(View v){
-        SharedPreferences.Editor edit = LauncherActivity.settings.edit();
+        SharedPreferences.Editor edit = Launcher.settings.edit();
         edit.putString("myCity", editT.getText().toString());
         edit.commit();
 

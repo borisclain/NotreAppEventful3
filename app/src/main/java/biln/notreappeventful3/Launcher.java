@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 /**
  * Created by Boris on 2015-03-18.
  */
-public class LauncherActivity extends Activity{
+public class Launcher extends Activity{
 
     public static SharedPreferences settings;
 
@@ -26,7 +26,7 @@ public class LauncherActivity extends Activity{
         }
         else
         {
-            SharedPreferences.Editor edit = LauncherActivity.settings.edit();
+            SharedPreferences.Editor edit = Launcher.settings.edit();
             edit.putBoolean("hasLoggedIn", Boolean.TRUE);
             edit.commit();
             Intent i = new Intent(this, ConfigurationActivity.class);
