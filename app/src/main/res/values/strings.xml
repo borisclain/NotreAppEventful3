@@ -11,4 +11,6 @@
     <string name="stop">Le 2 mars 2015 à 23h00</string>
     <string name="prix">payant</string>
 
+    <string name="menuShowFavorites">Mes favoris</string>
+
 </resources>

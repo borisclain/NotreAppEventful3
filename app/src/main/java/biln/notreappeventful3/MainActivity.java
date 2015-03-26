@@ -16,13 +16,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  *
  */
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends MenuActivities implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     ListView listv;
     SQLiteDatabase db;
@@ -45,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         listv.setAdapter(adapter);
         listv.setOnItemClickListener(this);
 
-        new SearchEventfulAndPopulate().execute();
+        new SearchEventfulAndPopulate().execute("a", "B", "C");
     }
 
     protected void onResume(){
@@ -87,14 +94,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     }
 
-    private class SearchEventfulAndPopulate extends AsyncTask<String, String, EventfulAPI> {
+    private class SearchEventfulAndPopulate extends AsyncTask<String, Integer, Cursor> {
 
         //TODO Implanter une barre de progrès ou une horloge qui tourne au lieu d'un toast
         protected void onPreExecute() {
             Toast.makeText(MainActivity.this, "Chargement", Toast.LENGTH_SHORT).show();
         }
 
-        protected EventfulAPI doInBackground(String... params) {
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+
+        }
+
+        protected Cursor doInBackground(String... params) {
+
+            this.publishProgress(50, 34, 66);
+
             EventfulAPI web = new EventfulAPI();
             web.getNextEvents(city);
             ContentValues val = new ContentValues();
@@ -109,15 +124,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val);
             }
             Log.d("DB", "nouveux titres ajoutes: ");
-            return null;
+            return DBHelper.listEvents(db);
         }
 
         protected void onProgressUpdate(String... s) {
         }
 
-        protected void onPostExecute(EventfulAPI web) {
+        protected void onPostExecute(Cursor c) {
             // rafraichir...
-            Cursor c = DBHelper.listEvents(db);
             adapter.changeCursor(c);
         }
 
@@ -135,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
+
 
             if(v==null){
                 v = inflater.inflate(android.R.layout.simple_list_item_2, parent, false);
