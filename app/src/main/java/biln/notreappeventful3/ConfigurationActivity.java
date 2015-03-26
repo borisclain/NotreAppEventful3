@@ -17,7 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 /**
  * Created by Boris on 2015-03-14.
  */
-public class WelcomingActivity extends ActionBarActivity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
+public class ConfigurationActivity extends ActionBarActivity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
 
 
     GoogleApiClient mGoogleApiClient;

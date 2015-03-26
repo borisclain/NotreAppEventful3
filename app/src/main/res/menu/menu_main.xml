@@ -5,7 +5,7 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 
-    <item android:id="@id/menuShowFavorites"
+    <item android:id="@+id/menuShowFavorites"
         app:showAsAction="always"
         android:title="Mes favoris"
         android:icon="@drawable/abc_ic_voice_search_api_mtrl_alpha" ></item>

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by Boris on 2015-03-10.
  */
-public class EventfulAPI {
+class EventfulAPI {
 
     ArrayList<Event> eventsFound;                                          //peuplé par la recherche
     String apiKey = "b5JxXhsHhJTW2mzP";
@@ -85,13 +85,15 @@ public class EventfulAPI {
                                                     item.getString("title"),
                                                         item.getString("start_time"),
                                                             "2020-01-01",//TODO Important
-                                                                item.getString("city_name")));
+                                                                item.getString("city_name"),
+                                                                    item.getString("description")));
                     } else {
                         eventsFound.add(new Event(item.getString("id"),
                                                     item.getString("title"),
                                                         item.getString("start_time"),
                                                             item.getString("stop_time"),
-                                                                item.getString("city_name")));
+                                                                item.getString("city_name"),
+                                                                    item.getString("description")));
                     }
                 }
 

@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     static final String DB_NAME = "eventful.db";
-    static final int DB_VERSION = 69;                   //TODO Important pour le développement
+    static final int DB_VERSION = 82;                   //TODO Important pour le développement
 
     static final String TABLE_EVENTS = "events";
     static final String C_ID = "_id";
@@ -26,6 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String C_DATE_START ="date_start";
     static final String C_DATE_STOP = "date_stop";
     static final String C_LOCATION ="location";
+    static final String C_DESCRIPTION = "description";
     static final String C_FAVORITE = "favorite";       //1 si l'événement est favori, 0 sinon
 
     public DBHelper(Context context) {
@@ -41,6 +42,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 +C_DATE_START+" text,"
                 +C_DATE_STOP+" text,"
                 +C_LOCATION+" text,"
+                +C_DESCRIPTION+" text,"
                 +C_FAVORITE+" integer," +
                 "UNIQUE "+"("+C_ID_FROM_EVENTFUL+")"+" ON CONFLICT REPLACE)";
         db.execSQL(sql);
@@ -68,6 +70,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+
+    public static Cursor getEventByID(SQLiteDatabase db, long idQueried){
+        int id = (int)idQueried;
+        Cursor c = db.rawQuery("select * from "+TABLE_EVENTS+" where "+C_ID+" = "+id, null);
+        c.moveToFirst();
+        return c;
+    }
 
 
     @Override
@@ -119,17 +128,3 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ff8acaff">
-
+    android:background="#ff8acaff"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         android:layout_marginLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Au Métropolis, Montréal"
-        android:id="@+id/textView2"
+        android:id="@+id/location"
         android:textStyle="bold" />
 
     <Space
@@ -57,7 +57,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/startID"
+                android:id="@+id/startT"
                 android:layout_weight="1"
                 android:text="@string/start"
                 android:minLines="2"
@@ -71,11 +71,11 @@
                 android:layout_width="112dp"
                 android:layout_height="fill_parent"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:id="@+id/stopID"
+                android:id="@+id/stopT"
                 android:layout_weight="1"
-                android:text="Le 15 février 2016 à 20h20"
                 android:minLines="2"
-                android:elegantTextHeight="false" />
+                android:elegantTextHeight="false"
+                android:text="fin de l&apos;événement" />
 
             <Space
                 android:layout_width="20px"
@@ -105,7 +105,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:button="@android:drawable/btn_star"
-                    android:id="@+id/my_star_button"
+                    android:id="@+id/starButton"
                     android:checked="false"
                     android:gravity="center_vertical|center_horizontal" />
 

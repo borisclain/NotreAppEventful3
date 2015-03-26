@@ -29,7 +29,7 @@ public class LauncherActivity extends Activity{
             SharedPreferences.Editor edit = LauncherActivity.settings.edit();
             edit.putBoolean("hasLoggedIn", Boolean.TRUE);
             edit.commit();
-            Intent i = new Intent(this, WelcomingActivity.class);
+            Intent i = new Intent(this, ConfigurationActivity.class);
             startActivity(i);
             finish();
         }

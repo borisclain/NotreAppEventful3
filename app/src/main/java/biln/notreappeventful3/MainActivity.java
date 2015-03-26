@@ -2,34 +2,25 @@ package biln.notreappeventful3;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  *
  */
-public class MainActivity extends MenuActivities implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends ActivityWithMenu implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     ListView listv;
     SQLiteDatabase db;
@@ -59,39 +50,35 @@ public class MainActivity extends MenuActivities implements View.OnClickListener
         super.onResume();
     }
 
-
     public void onClick(View v){
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long viewID) {
 
+
+        Toast.makeText(getApplicationContext(), "Clic reçu", Toast.LENGTH_SHORT).show();
+
+
+
         Log.d("db","Clic sur item en position= "+position+" et avec viewID = "+ viewID);
+        Intent intent = new Intent(this, DetailsActivity.class);
+        Bundle b = new Bundle();
 
-        DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
-        Cursor c = DBHelper.listEvents(db);
-        adapter.changeCursor(c);
+        Cursor c = DBHelper.getEventByID(db, viewID);
 
+        b.putString("title", c.getString(c.getColumnIndex(DBHelper.C_TITLE)) );
+        b.putString("location", c.getString(c.getColumnIndex(DBHelper.C_LOCATION)) );
+        b.putString("startT", c.getString(c.getColumnIndex(DBHelper.C_DATE_START)) );
+        //b.putString("stopT", c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)) );
+        b.putString("description", c.getString(c.getColumnIndex(DBHelper.C_DESCRIPTION)) );
+        intent.putExtras(b);
+        startActivity(intent);
+
+        //adapter.changeCursor(c);
+        // DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
+        //Cursor c = DBHelper.listEvents(db);
+        //adapter.changeCursor(c);
     }
 
     private class SearchEventfulAndPopulate extends AsyncTask<String, Integer, Cursor> {
@@ -120,6 +107,7 @@ public class MainActivity extends MenuActivities implements View.OnClickListener
                 val.put(DBHelper.C_DATE_START, web.eventsFound.get(i).date_start);
                 val.put(DBHelper.C_DATE_STOP, web.eventsFound.get(i).date_stop);
                 val.put(DBHelper.C_LOCATION, web.eventsFound.get(i).location);
+                val.put(DBHelper.C_DESCRIPTION, web.eventsFound.get(i).description);
                 val.put(DBHelper.C_FAVORITE, 0);
                 db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val);
             }
@@ -152,17 +140,22 @@ public class MainActivity extends MenuActivities implements View.OnClickListener
 
 
             if(v==null){
-                v = inflater.inflate(android.R.layout.simple_list_item_2, parent, false);
+                v = inflater.inflate(R.layout.my_rows, parent, false);
             }
 
-            TextView titleV = (TextView)v.findViewById(android.R.id.text1);
-            TextView dateV = (TextView)v.findViewById(android.R.id.text2);
+            TextView title = (TextView)v.findViewById(R.id.title);
+            TextView startT = (TextView)v.findViewById(R.id.startT);
+            TextView stopT = (TextView)v.findViewById(R.id.stopT);
+            TextView location = (TextView)v.findViewById(R.id.location);
 
-            Cursor c=getCursor();
+            Cursor c = getCursor();
             c.moveToPosition(position);
             String id= c.getString(c.getColumnIndex(DBHelper.C_ID));
-            dateV.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
-            titleV.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " id supposé : "+id);
+
+            title.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " id supposé : "+id);
+            location.setText(c.getString(c.getColumnIndex(DBHelper.C_LOCATION)));
+            startT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
+            stopT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)));
 
             return v;
         }
