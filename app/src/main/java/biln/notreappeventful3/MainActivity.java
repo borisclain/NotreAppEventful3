@@ -20,7 +20,7 @@ import android.widget.Toast;
 /**
  *
  */
-public class MainActivity extends ActivityWithMenu implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends MyMenu implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     ListView listv;
     SQLiteDatabase db;
