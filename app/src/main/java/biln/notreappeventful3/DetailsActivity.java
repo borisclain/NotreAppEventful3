@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 /**
  * Created by Boris on 2015-03-25.
  */
-public class DetailsActivity extends ActivityWithMenu {
+public class DetailsActivity extends MyMenu {
 
     TextView title;
     TextView location;
@@ -43,7 +43,9 @@ public class DetailsActivity extends ActivityWithMenu {
 
         Document doc = Jsoup.parse(b.getString("description"));
 
+
         description.setText(doc.body().text());
+
 
 
 

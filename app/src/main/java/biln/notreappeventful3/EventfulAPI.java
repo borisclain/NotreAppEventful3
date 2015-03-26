@@ -46,6 +46,8 @@ class EventfulAPI {
     }
 
 
+
+
     /**
      * Méthode utilitaire locale
      *
