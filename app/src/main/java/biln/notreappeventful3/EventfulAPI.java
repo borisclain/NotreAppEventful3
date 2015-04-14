@@ -127,12 +127,11 @@ class EventfulAPI {
 
         String url = "http://api.eventful.com/json/events/get?" + URLEncodedUtils.format(query, HTTP.UTF_8);
 
+
+
+
         Log.d("ENCODAGE DE L'URL", url);
         ArrayList<String> detailsList = new ArrayList<>();
-
-
-
-        //String myQuery = urlget+ id; //si le ID est hardcodé
         try
         {
             HttpEntity page = getHttp(url);
@@ -143,14 +142,23 @@ class EventfulAPI {
 
             Log.d("EventfulAPI", "Nombre de categories: " + category.length());
 
+            JSONObject images = js.getJSONObject("images");
+            JSONObject image = images.getJSONObject("image");
+            JSONObject medium = image.getJSONObject("medium");
+            String urlImage = medium.getString("url");
+
+
             String s = " ";
             if(!(category.length()== 0)){
                 for(int i = 0; i<category.length(); i++){
                     JSONObject item = category.getJSONObject(i);
-                    s = s + " ; " + item.getString("name");
+                    s = s + " ; " + item.getString("id");  // "name" music ; theatre
                 }
+
             }
+
             detailsList.add(s);
+            detailsList.add(urlImage);
 
 
 

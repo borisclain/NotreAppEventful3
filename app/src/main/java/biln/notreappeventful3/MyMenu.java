@@ -36,6 +36,17 @@ public class MyMenu extends ActionBarActivity {
             return true;
         }
 
+        if (id == R.id.menuAdvancedSearch) {
+            Toast.makeText(getApplicationContext(), "Faisons une recherche avancée", Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(this, SearchActivity.class);
+            startActivity(i);
+            //finish();
+            return true;
+        }
+
+
+
         return super.onOptionsItemSelected(item);
     }
 

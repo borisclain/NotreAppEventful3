@@ -28,6 +28,7 @@ public class DetailsActivityLena extends MyMenu {
     TextView stopT;
     TextView description;
     TextView categories;
+    TextView imageUrl;
     ImageView image;
 
 
@@ -44,6 +45,7 @@ public class DetailsActivityLena extends MyMenu {
         description = (TextView) findViewById(R.id.event_description);
         categories = (TextView) findViewById(R.id.event_categories);
         image = (ImageView) findViewById(R.id.event_image);
+        imageUrl = (TextView) findViewById(R.id.imageUrl);
 
 
         Bundle b = getIntent().getExtras();
@@ -101,22 +103,16 @@ public class DetailsActivityLena extends MyMenu {
             ArrayList<String> event_details = new ArrayList<String>();
             EventfulAPI web = new EventfulAPI();
             String id = params[0];
-            Log.d("DetailsActivityLena", "Le ID a bien été transféré = " + id);
-
-            // TODO Tester le alpha
-            //event_details = web.getEventDetails("E0-001-081313340-0@2015043020");
             event_details = web.getEventDetails(id);
-
-
-            Log.d("DetailsActivityLena", "event_details size =" + event_details.size());
             return event_details;
         }
 
         @Override
         protected void onPostExecute(ArrayList<String> list_details) {
-
-            Log.d("DetailsActivityLena", "On est rentrés dans le OnPostExecute");
-            categories.setText(list_details.get(0));
+            for(String element : list_details) { //TODO A verifier
+                categories.setText(list_details.get(0));
+                imageUrl.setText(list_details.get(1));
+            }
         }
     }
 

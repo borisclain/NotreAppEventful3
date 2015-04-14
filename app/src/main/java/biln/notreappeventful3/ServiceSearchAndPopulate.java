@@ -50,6 +50,7 @@ public class ServiceSearchAndPopulate extends IntentService{
                 val.put(DBHelper.C_DATE_STOP, web.eventsFound.get(i).date_stop);
                 val.put(DBHelper.C_LOCATION, web.eventsFound.get(i).location);
                 val.put(DBHelper.C_DESCRIPTION, web.eventsFound.get(i).description);
+                val.put(DBHelper.C_NEW, web.eventsFound.get(i).newRes);
                 val.put(DBHelper.C_FAVORITE, 0);
                 db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val);
             }

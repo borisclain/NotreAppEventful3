@@ -49,6 +49,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Ici l&apos;URL"
+                android:id="@+id/imageUrl" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Du 07 Juillet 2015 à 0h00"
                 android:id="@+id/event_datestart"
                 android:layout_marginTop="5dp"

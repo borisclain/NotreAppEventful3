@@ -11,6 +11,7 @@ class Event {
     public String date_stop;
     public String location;
     public String description;
+    public int newRes;
 
     public Event(String idFromEventful, String title,String date_start, String date_stop, String location, String description){
         this.idFromEventful = idFromEventful;
@@ -19,6 +20,7 @@ class Event {
         this.date_stop = date_stop;
         this.location = location;
         this.description = description;
+        this.newRes = 1;
     }
 
 

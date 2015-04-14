@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class DBHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "eventful.db";
-    static final int DB_VERSION = 102;                   //TODO Important pour le développement
+    static final int DB_VERSION = 104;                   //TODO Important pour le développement
 
     static final String TABLE_EVENTS = "events";
     static final String C_ID = "_id";
@@ -27,6 +27,8 @@ public class DBHelper extends SQLiteOpenHelper {
     static final String C_LOCATION ="location";
     static final String C_DESCRIPTION = "description";
     static final String C_FAVORITE = "favorite";       //1 si l'événement est favori, 0 sinon
+
+    static final String C_NEW = "newRes";  // 1 si l'événement est nouveau, 0 sinon
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -42,7 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 +C_DATE_STOP+" text,"
                 +C_LOCATION+" text,"
                 +C_DESCRIPTION+" text,"
-                +C_FAVORITE+" integer," +
+                +C_NEW+" integer,"
+                +C_FAVORITE+" integer,"+
                 "UNIQUE "+"("+C_ID_FROM_EVENTFUL+")"+" ON CONFLICT REPLACE)";
         db.execSQL(sql);
         Log.d("DB", "DB created");
@@ -70,6 +73,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+
+
     public static Cursor getEventByID(SQLiteDatabase db, long idQueried){
         int id = (int)idQueried;
         Cursor c = db.rawQuery("select * from "+TABLE_EVENTS+" where "+C_ID+" = "+id, null);
@@ -85,7 +90,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static Cursor listEvents(SQLiteDatabase db){
-        Cursor c = db.rawQuery("select * from " + TABLE_EVENTS + " order by " + C_DATE_STOP + " asc", null);
+        //" where "+C_NEW+ " = "+1+
+        Cursor c = db.rawQuery("select * from " + TABLE_EVENTS +" order by " + C_DATE_STOP + " asc", null);
         Log.d("DB","liste events nb = "+c.getCount());
         return c;
     }
@@ -123,6 +129,19 @@ public class DBHelper extends SQLiteOpenHelper {
             val.put(C_FAVORITE, 0);
         }
         db.update(TABLE_EVENTS ,val, C_ID+" = "+id, null); //update l'élément dont on a récupéré le ID
+    }
+
+    public void setEventsToOld(SQLiteDatabase db){
+
+        ContentValues val = new ContentValues();
+        Cursor c = db.rawQuery("select * from "+TABLE_EVENTS+" where "+C_NEW+" = "+1, null);
+        c.moveToFirst();
+        while (c.isAfterLast() == false) {
+            val.put(C_NEW, 0);
+            int id =  c.getInt(c.getColumnIndex(C_ID));
+            db.update(TABLE_EVENTS , val, C_ID+" = "+id, null);
+            c.moveToNext();
+        }
     }
 
 
