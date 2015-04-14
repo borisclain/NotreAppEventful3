@@ -20,12 +20,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 public class ConfigurationActivity extends ActionBarActivity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
 
 
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-
-    String sLat;
-    String sLon;
-
     Button GoButton;
     EditText editT;
 
@@ -37,18 +31,6 @@ public class ConfigurationActivity extends ActionBarActivity implements Connecti
         GoButton = (Button)findViewById(R.id.GoButton);
         editT = (EditText)findViewById(R.id.editT);
         GoButton.setOnClickListener(this);
-
-
-        //TODO Ne fonctionne pas!
-        /*
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-        Toast.makeText(this, "On a détecté que vos coordonnées =" + sLat + " ; " + sLon, Toast.LENGTH_LONG).show();
-        */
     }
 
 
@@ -67,34 +49,15 @@ public class ConfigurationActivity extends ActionBarActivity implements Connecti
     @Override
     protected void onStart() {
         super.onStart();
-        //mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
-        //mGoogleApiClient.disconnect();
         super.onStop();
     }
-    /*
-    protected synchronized void buildGoogleApiClient() {
-         mGoogleApiClient = new GoogleApiClient.Builder(this)
-               .addConnectionCallbacks(this)
-               .addOnConnectionFailedListener(this)
-               .addApi(LoctionServices.API)
-               .build();
-    }
-    */
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        /*
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            sLat = ""+(mLastLocation.getLatitude());
-            sLon = ""+(mLastLocation.getLongitude());
-        }
-        */
     }
 
     @Override
@@ -103,7 +66,6 @@ public class ConfigurationActivity extends ActionBarActivity implements Connecti
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        //Toast.makeText(this, "On a eu un probleme", Toast.LENGTH_LONG).show();
     }
 
 }

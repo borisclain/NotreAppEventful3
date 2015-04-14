@@ -13,4 +13,37 @@
 
     <string name="menuShowFavorites">Mes favoris</string>
 
+
+
+    <string name="cat_music">music</string>
+    <string name="cat_conference">conference</string>
+    <string name="cat_comedy">comedy</string>
+    <string name="cat_learning_education">learning_education</string>
+    <string name="cat_family_fun_kids">family_fun_kids</string>
+    <string name="cat_festivals_parades">festivals_parades</string>
+    <string name="cat_movies_film">movies_film</string>
+    <string name="cat_food">food</string>
+    <string name="cat_fundraisers">fundraisers</string>
+    <string name="cat_art">art</string>
+    <string name="cat_support">support</string>
+    <string name="cat_holiday">holiday</string>
+    <string name="cat_books">books</string>
+    <string name="cat_attractions">attractions</string>
+    <string name="cat_community">community</string>
+    <string name="cat_business">business</string>
+    <string name="cat_singles_social">singles_social</string>
+    <string name="cat_schools_alumni">schools_alumni</string>
+    <string name="cat_club_associations">clubs_associations</string>
+    <string name="cat_outdoors_recreation">outdoors_recreation</string>
+    <string name="cat_performing_arts">performing_arts</string>
+    <string name="cat_animals">animals</string>
+    <string name="cat_politics_activism">politics_activism</string>
+    <string name="cat_sales">sales</string>
+    <string name="cat_science">science</string>
+    <string name="cat_religion_spirituality">religion_spirituality</string>
+    <string name="cat_sports">sports</string>
+    <string name="cat_technology">technology</string>
+    <string name="cat_other">other</string>
+
+
 </resources>

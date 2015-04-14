@@ -1,8 +1,10 @@
 package biln.notreappeventful3;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -23,13 +25,13 @@ import android.widget.Toast;
  *
  */
 public class MainActivity extends MyMenu implements View.OnClickListener, AdapterView.OnItemClickListener {
-
+    String city;
     ListView listv;
+    MyAdapter adapter;
     SQLiteDatabase db;
     DBHelper dbh;
-    MyAdapter adapter;
-    String city;
-
+    BusyReceiver busyR;
+    IntentFilter filter;
 
 
     @Override
@@ -40,17 +42,32 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         listv = (ListView)findViewById(R.id.activity_list);
         dbh = new DBHelper(this);
         db = dbh.getWritableDatabase();
+
+        //initialisation
         Cursor c = DBHelper.listEvents(db);
+
         adapter = new MyAdapter(this, c);
         listv = (ListView)findViewById(R.id.activity_list);
         listv.setAdapter(adapter);
         listv.setOnItemClickListener(this);
 
-        new SearchEventfulAndPopulate().execute("a", "B", "C");
+        Intent in = new Intent(this, ServiceSearchAndPopulate.class);
+        in.putExtra("populateList", true);  //aller chercher l'information sur le web IMPORTANT
+        startService(in);
+
+        busyR = new BusyReceiver();
+        filter = new IntentFilter("biln.notreappeventful3.BUSY");
+
     }
 
     protected void onResume(){
         super.onResume();
+        registerReceiver(busyR, filter);
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        unregisterReceiver(busyR);
     }
 
     public void onClick(View v){
@@ -62,7 +79,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         Toast.makeText(getApplicationContext(), "Clic reçu", Toast.LENGTH_SHORT).show();
 
         Log.d("db","Clic sur item en position= "+position+" et avec viewID = "+ viewID);
-        Intent intent = new Intent(this, DetailsActivity.class);
+        Intent intent = new Intent(this, DetailsActivityLena.class); //TODO : DetailsActivity
         Bundle b = new Bundle();
 
         Cursor c = DBHelper.getEventByID(db, viewID);
@@ -70,61 +87,22 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         b.putString("title", c.getString(c.getColumnIndex(DBHelper.C_TITLE)) );
         b.putString("location", c.getString(c.getColumnIndex(DBHelper.C_LOCATION)) );
         b.putString("startT", c.getString(c.getColumnIndex(DBHelper.C_DATE_START)) );
-        //b.putString("stopT", c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)) );
         b.putString("description", c.getString(c.getColumnIndex(DBHelper.C_DESCRIPTION)) );
+        b.putString("eventfulID", c.getString(c.getColumnIndex(DBHelper.C_ID_FROM_EVENTFUL)));
         intent.putExtras(b);
         startActivity(intent);
-
-        //adapter.changeCursor(c);
-        //DBHelper.changeFavoriteStatus(db, (int)viewID); // TODO Vérifier !
-        //Cursor c = DBHelper.listEvents(db);
-        //adapter.changeCursor(c);
     }
 
+    public class BusyReceiver extends BroadcastReceiver {
 
-
-
-
-    private class SearchEventfulAndPopulate extends AsyncTask<String, Integer, Cursor> {
-
-        //TODO Implanter une barre de progrès ou une horloge qui tourne au lieu d'un toast
-        protected void onPreExecute() {
-            Toast.makeText(MainActivity.this, "Chargement", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-
-        }
-
-        protected Cursor doInBackground(String... params) {
-
-            this.publishProgress(50, 34, 66);
-
-            EventfulAPI web = new EventfulAPI();
-            web.getNextEvents(city);
-            ContentValues val = new ContentValues();
-            for(int i=0;i<web.eventsFound.size();i++){
-                // ON NE SPÉCIFIE PAS EPLICITEMENT LA VALEUR DE _id. ON LE LAISSE AUTOINCRÉMENTER
-                val.put(DBHelper.C_ID_FROM_EVENTFUL, web.eventsFound.get(i).idFromEventful);
-                val.put(DBHelper.C_TITLE, web.eventsFound.get(i).title);
-                val.put(DBHelper.C_DATE_START, web.eventsFound.get(i).date_start);
-                val.put(DBHelper.C_DATE_STOP, web.eventsFound.get(i).date_stop);
-                val.put(DBHelper.C_LOCATION, web.eventsFound.get(i).location);
-                val.put(DBHelper.C_DESCRIPTION, web.eventsFound.get(i).description);
-                val.put(DBHelper.C_FAVORITE, 0);
-                db.insertOrThrow(DBHelper.TABLE_EVENTS, null, val);
+        public void onReceive(Context context, Intent intent){
+            if(intent.getBooleanExtra("begin", false)){
+                Toast.makeText(context, "Downloading and putting in DB", Toast.LENGTH_SHORT).show();
             }
-            Log.d("DB", "nouveux titres ajoutes: ");
-            return DBHelper.listEvents(db);
-        }
-
-        protected void onProgressUpdate(String... s) {
-        }
-
-        protected void onPostExecute(Cursor c) {
-            // rafraichir...
-            adapter.changeCursor(c);
+            if(intent.getBooleanExtra("end", false)){
+                Cursor c = dbh.listEvents(db);
+                adapter.changeCursor(c);
+            }
         }
 
     }
@@ -158,7 +136,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
             c.moveToPosition(position);
             String id= c.getString(c.getColumnIndex(DBHelper.C_ID));
 
-            title.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " id supposé : "+id);
+            title.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " ID in DB : "+id);
             location.setText(c.getString(c.getColumnIndex(DBHelper.C_LOCATION)));
             startT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
             stopT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)));
@@ -168,7 +146,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     int pos = ((Integer)buttonView.getTag()).intValue();
                     Log.d("Listener", "Checked "+isChecked+" "+pos);
-
+                    DBHelper.changeFavoriteStatus(db, pos);
                 }
             });
 
@@ -188,7 +166,6 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         }
 
     }
-
 
 }
 
