@@ -30,7 +30,7 @@ public class MyMenu extends ActionBarActivity {
         if (id == R.id.menuShowFavorites) {
             Toast.makeText(getApplicationContext(), "Consultons nos favoris", Toast.LENGTH_SHORT).show();
 
-            Intent i = new Intent(this, FavoritesActivity.class);
+            Intent i = new Intent(this, Favorites.class);
             startActivity(i);
             //finish();
             return true;

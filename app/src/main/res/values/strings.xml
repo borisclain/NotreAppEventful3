@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">NotreApp</string>
+    <string name="app_name">Event4You</string>
     <string name="action_settings">Settings</string>
 
     <string name="prompt">Dans quelle ville êtes-vous?</string>
@@ -12,6 +12,7 @@
     <string name="prix">payant</string>
 
     <string name="menuShowFavorites">Mes favoris</string>
+    <string name="location">Lieu : </string>
 
 
 
@@ -44,6 +45,55 @@
     <string name="cat_sports">sports</string>
     <string name="cat_technology">technology</string>
     <string name="cat_other">other</string>
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="titre_filtrer">""</string>
+
+    <string name="rechercher_date">Par date</string>
+    <string name="date_debut">Modifier la date de début </string>
+    <string name="date_fin">Modifier la date de fin     </string>
+    <string name="message_toast_erreurs_dates">La date de fin doit être obligatoirement ultérieure à la date de début.</string>
+
+
+    <string-array name="dates_array" >
+        <item ><b>Aujourd\'hui</b></item>
+        <item ><b>Demain</b></item>
+        <item ><b>Les 7 prochains jours</b></item>
+        <item ><b>Le mois prochain</b></item>
+        <item ><b>Cette année</b></item>
+    </string-array>
+
+
+
+    <string name="rechercher_lieu">Par lieu</string>
+    <string name="lieu">Entrez une ville </string>
+
+
+    <string name="rechercher_categories">Par catégorie</string>
+
+    <string name="concerts">Musique et concerts</string>
+    <string name="films">Films</string>
+    <string name="musee">Art et Musées</string>
+    <string name="loisirs">Loisirs</string>
+    <string name="sciences">Sciences et technologie</string>
+    <string name="sport">Sports</string>
+    <string name="gastronomie">Gastronomie</string>
+    <string name="nightlife">Vie nocturne</string>
+
+    <string name="validation_filtrage">Filtrer les résultats</string>
+
+
+    <string name="startDebut">Début : </string>
+    <string name="end">Fin : </string>
+    <string name="price">Prix : </string>
+    <string name="le_lieu">Lieu : </string>
+    <string name="titre_vide">Test Titre </string>
+
+
+    <string name="first_screen_1st">Pour</string>
+    <string name="first_screen_2nd">commencer...</string>
+
 
 
 </resources>

@@ -40,12 +40,17 @@
         </activity>
 
         <activity
-            android:name=".FavoritesActivity"
+            android:name=".Favorites"
             android:label="@string/app_name">
         </activity>
 
         <activity
             android:name=".DetailsActivityLena"
+            android:label="NotreApp">
+        </activity>
+
+        <activity
+            android:name=".SearchActivityNassym"
             android:label="NotreApp">
         </activity>
 

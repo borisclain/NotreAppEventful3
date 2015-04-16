@@ -21,6 +21,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  */
@@ -39,9 +44,9 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         city = Launcher.settings.getString("myCity", "Ottawa");
-        listv = (ListView)findViewById(R.id.activity_list);
         dbh = new DBHelper(this);
         db = dbh.getWritableDatabase();
+
 
         //initialisation
         Cursor c = DBHelper.listEvents(db);
@@ -52,7 +57,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
         listv.setOnItemClickListener(this);
 
         Intent in = new Intent(this, ServiceSearchAndPopulate.class);
-        in.putExtra("populateList", true);  //aller chercher l'information sur le web IMPORTANT
+        in.putExtra("populateSuggestedList", true);  //aller chercher l'information sur le web IMPORTANT
         startService(in);
 
         busyR = new BusyReceiver();
@@ -60,10 +65,15 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
 
     }
 
+
+
+
     protected void onResume(){
         super.onResume();
         registerReceiver(busyR, filter);
     }
+
+
     @Override
     public void onPause(){
         super.onPause();
@@ -125,6 +135,7 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
                 v = inflater.inflate(R.layout.my_rows, parent, false);
             }
 
+
             TextView title = (TextView)v.findViewById(R.id.title);
             TextView startT = (TextView)v.findViewById(R.id.startT);
             TextView stopT = (TextView)v.findViewById(R.id.stopT);
@@ -133,25 +144,67 @@ public class MainActivity extends MyMenu implements View.OnClickListener, Adapte
             CheckBox myBtn = (CheckBox)v.findViewById(R.id.starButton);
 
             Cursor c = getCursor();
-            c.moveToPosition(position);
-            String id= c.getString(c.getColumnIndex(DBHelper.C_ID));
 
-            title.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " ID in DB : "+id);
+            c.moveToPosition(position);
+            int id= c.getInt(c.getColumnIndex(DBHelper.C_ID));
+
+            // Format des dates
+            DateFormat dateFormatFinal= new SimpleDateFormat("dd MMM yyyy hh:mm");
+            DateFormat dateFormatIni= new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+            String dateDebut = c.getString(c.getColumnIndex(DBHelper.C_DATE_START));
+            String dateFin = c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP));
+            try{
+                Date dateOld1 = dateFormatIni.parse(dateDebut);
+                Date dateOld2 = dateFormatIni.parse(dateFin);
+                String newDate1 = dateFormatFinal.format(dateOld1);
+                String newDate2 = dateFormatFinal.format(dateOld2);
+                dateDebut = newDate1;
+                dateFin = newDate2;
+            }catch(ParseException e){
+                e.printStackTrace();
+            }
+
+            //TODO: enlever "id supposé"
+            title.setText(c.getString(c.getColumnIndex(DBHelper.C_TITLE))+ " id : "+id);
             location.setText(c.getString(c.getColumnIndex(DBHelper.C_LOCATION)));
-            startT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_START)));
-            stopT.setText(c.getString(c.getColumnIndex(DBHelper.C_DATE_STOP)));
+            startT.setText(dateDebut);
+            stopT.setText(dateFin);
+
+            int valFavorite = c.getInt(c.getColumnIndex(DBHelper.C_FAVORITE));
+            //pour ne pas que le setChecked soit considérer dans le recyclage
+            myBtn.setOnCheckedChangeListener(null);
+            myBtn.setChecked(valFavorite==1);
 
             myBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int pos = ((Integer)buttonView.getTag()).intValue();
-                    Log.d("Listener", "Checked "+isChecked+" "+pos);
-                    DBHelper.changeFavoriteStatus(db, pos);
+
+                    int id = ((Integer) buttonView.getTag()).intValue();
+                    //Toast.makeText(getApplicationContext(), "changé ds les favoris " + " " + isChecked, Toast.LENGTH_SHORT).show();
+                    Log.d("Listener", "Checked " + isChecked + " "  + " " + id );
+                    dbh.changeFavoriteStatus(db, id);//(int)getItemId(pos)
+
+
+                    Cursor nc = DBHelper.listEvents(db);
+                    MyAdapter.this.swapCursor(nc);
+
+                    //voir listview: MyAdapter notifyDatasetchanged
+
+                    if(isChecked){
+                        Toast.makeText(getApplicationContext(), "Ajouté aux favoris ", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Retiré des favoris ", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
             });
 
-            myBtn.setTag(new Integer(Integer.parseInt(id)));
+            myBtn.setTag(new Integer(id));
+
             return v;
+
+
 
         }
 
